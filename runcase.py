@@ -44,6 +44,9 @@ parser.add_option("--pft", dest="mypft", default=-1, \
                   help = 'Use this PFT for all gridcells')
 parser.add_option("--parm_file", dest="parm_file", default='',
                   help = 'file for parameter modifications')
+# added by Wei Huang 2022-08-03 for 2nd plant species
+parser.add_option("--parm_file_2nd", dest="parm_file_2nd", default='',
+                  help = 'file for parameter modifications')
 parser.add_option("--parm_vals", dest="parm_vals", default="", \
                   help = 'User specified parameter values')
 parser.add_option("--parm_file_P", dest="parm_file_P", default='',
@@ -925,7 +928,40 @@ if (options.parm_file != ''):
                         os.system(myncap+' -O -s "%s = q10_mr*0+%s" '%(values[0],values[2])+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
                
     input.close()
+if (options.parm_file_2nd != ''):
+    pftfile = tmpdir+'/clm_params.nc'
+    if ('/' not in options.parm_file_2nd):
+       #assume in pointclm directory
+       input  = open(PTCLMdir+'/'+options.parm_file_2nd)
+    else:   #assume full path given
+       input   = open(os.path.abspath(options.parm_file_2nd))
+    for s in input:
+        if s[0:1] != '#':
+            values = s.split()
+            try:
+                thisvar = nffun.getvar(pftfile, values[0])
+                if (len(values) == 2):
+                    thisvar[...] = float(values[1])
+                elif (len(values) == 3):
+                    if (float(values[1]) > 0):
+                        thisvar[int(values[1])] = float(values[2])
+                    else:
+                        thisvar[...] = float(values[2])
+                ierr = nffun.putvar(pftfile, values[0], thisvar)
+            except ValueError:
+                print('Parameter %s not found in clm_params.nc. Adding.'%values[0])
+                if (len(values) == 2):
+                    print('No PFT specified. Assuming universal parameter')
+                    os.system(myncap+' -O -s "%s = q10_mr*0+%1.4e" '%(values[0],values[1])+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
+                elif (len(values) == 3):
+                    if (float(values[1]) > 0):
+                        print('PFT specified. Setting value for all PFTs')
+                        os.system(myncap+' -O -s "%s = flnr*0+%s" '%(values[0],values[2])+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
+                    else:
+                        print('No PFT specified. Assuming universal parameter')
+                        os.system(myncap+' -O -s "%s = q10_mr*0+%s" '%(values[0],values[2])+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
 
+    input.close()
 if (options.parm_vals != ''):
     pftfile = tmpdir+'/clm_params.nc'
     parms = options.parm_vals.split('/')

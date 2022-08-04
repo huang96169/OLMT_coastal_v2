@@ -15,4 +15,4 @@ python ./site_fullrun.py \
       --col3rd \
       --np 1 \
       --tide_components_file /home1/06923/wendy611/OLMT_ALQUIMIA/harmonic_tides_8575512.csv \
-      --parm_file /home1/06923/wendy611/OLMT_ALQUIMIA/parm_short_GC3_6 \
+      --parm_file /home1/06923/wendy611/OLMT_coastal_v2/parm_short_GC3_6 \

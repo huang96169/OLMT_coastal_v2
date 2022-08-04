@@ -139,6 +139,9 @@ parser.add_option("--siteparms",dest = "siteparms", default=False, action="store
                   help = 'Use default PFT parameters')
 parser.add_option("--parm_file", dest="parm_file", default="", \
                   help = 'parameter file to use')
+# added for 2nd plant by Wei Huang 2022-08-03
+parser.add_option("--parm_file_2nd", dest="parm_file_2nd", default="", \
+                  help = 'parameter file to use')
 parser.add_option("--parm_file_P", dest="parm_file_P", default="", \
                   help = 'parameter file to use')
 parser.add_option("--fates_paramfile", dest="fates_paramfile", default="", \
@@ -533,6 +536,8 @@ for row in AFdatareader:
             basecmd = basecmd+' --caseidprefix '+mycaseid
         if (options.parm_file != ''):
             basecmd = basecmd+' --parm_file '+options.parm_file
+        if (options.parm_file_2nd != ''):
+            basecmd = basecmd+' --parm_file_2nd '+options.parm_file_2nd
         if (options.parm_file_P != ''):
             basecmd = basecmd+' --parm_file_P '+options.parm_file_P
         if (options.parm_vals != ''):

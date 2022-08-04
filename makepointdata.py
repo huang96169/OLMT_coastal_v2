@@ -218,6 +218,7 @@ elif (options.site != ''):
                 n_grids = 2
             #adding third grid cell [Wei Huang, 2022-07-06]
             if (options.col3rd):
+                AFdatareader = csv.reader(open(ccsm_input+'/lnd/clm2/PTCLM/'+options.sitegroup+'_sitedata.txt',"r"))
                 for row in AFdatareader:
                    if row[0] == options.site3rd:
                       mylon=float(row[3])
