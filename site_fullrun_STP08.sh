@@ -1,7 +1,7 @@
 #!/bin/sh -f
 
 python ./site_fullrun.py \
-      --site US-GC3 --site3rd US-3rd --sitegroup Wetland --caseidprefix STP06 \
+      --site US-GC3 --site3rd US-3rd --sitegroup Wetland --caseidprefix STP08 \
       --nyears_ad_spinup 200 --nyears_final_spinup 600 --nyears_transient 169 --tstep 1 \
       --cpl_bypass --machine stampede2 --compiler intel --mpilib impi \
       --gswp3 --daymet \
@@ -16,4 +16,4 @@ python ./site_fullrun.py \
       --np 1 \
       --tide_components_file /home1/06923/wendy611/OLMT_ALQUIMIA/harmonic_tides_8575512.csv \
       --parm_file /home1/06923/wendy611/OLMT_coastal_v2/parm_short_GC3_7 \
-      --parm_file_2nd /home1/06923/wendy611/OLMT_coastal_v2/parm_short_GC3_7 \
+      --parm_file_2nd /home1/06923/wendy611/OLMT_coastal_v2/parm_short_GC3_8 \
