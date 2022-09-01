@@ -1,0 +1,7 @@
+flnr 7 0.02 0.20
+vcmaxha 7 40000 90000
+jmaxha 7 40000 90000
+roota_par 7 0.5 15
+mbbopt 7 2 13
+froot_leaf 13 min max
+froot_leaf 14 min max
