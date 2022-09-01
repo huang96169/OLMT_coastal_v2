@@ -5,7 +5,7 @@ dleaf 13 0.0633
 dsladlai 13 0.0
 fcur 13 0.2182
 flnr 13 0.1157
-froot_leaf 13 0.8686
+froot_leaf 13 0.6
 froot_long 13 0.4571
 frootcn 13 56.9128
 frootcp 13 268.7455
@@ -20,5 +20,5 @@ slatop 13 0.0230
 ndays_off 0 20
 ndays_on 0 25
 stress_decid 13 1
-humhol_ht 0 0.3
-humhol_ht_frac 0 2.333
+humhol_ht 0 0.6
+humhol_ht_frac 0 1.4
