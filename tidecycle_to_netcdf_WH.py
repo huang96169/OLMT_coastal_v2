@@ -48,7 +48,7 @@ import xarray
 #d.to_netcdf('./tides_100yr.nc')
 
 # Write a one year file with PIE salinity data
-sal_data = pandas.read_csv('/home/whf/E3SM/OLMT_coastal_v2/Annapolis_sal_elev_datenum.csv')
+sal_data = pandas.read_csv('/home/whf/E3SM/OLMT_coastal_v2/Annapolis_sal_elev_datenum_NAVD.csv')
 sal_data['Tide_salinity']=sal_data['Tide_salinity'].fillna(25)
 salinity=sal_data['Tide_salinity'].to_numpy()
 time=sal_data['time_e'].to_numpy()
@@ -59,7 +59,7 @@ tide_elev=sal_data['Tide_height'].to_numpy()
 #t_data = pandas.read_csv('~/PHM/soilt18.csv')
 #t_data['soilt']=t_data['soilt'].fillna(274)
 #soilt=t_data['soilt'].to_numpy()
-time=xarray.Variable(dims='time',data=time[:],attrs={'units':'hours'})
+time=xarray.Variable(dims='time',data=time[:],attrs={'units':'days'})
 #tide_height=xarray.Variable(dims=('time','gridcell'),data=tide2(arange(8760,dtype=float)*3600,amp=tide_coeffs['Amplitude'].values,phase=tide_coeffs['Phase'].values,speed=tide_coeffs['Speed'].values,datum=4.38*304.8e-3)[:,None],attrs={'units':'m'})
 #tide_height=xarray.Variable(dims=('time','gridcell'),data=tide2(arange(8760,dtype=float)*3600,amp=tide_coeffs['Amplitude'].values,phase=tide_coeffs['Phase'].values,speed=tide_coeffs['Speed'].values,datum=0.0)[:,None],attrs={'units':'m'})
 tide_salinity=xarray.Variable(dims=('time','gridcell'),data=salinity[:,None],attrs={'units':'ppt'})
@@ -68,4 +68,4 @@ tide_height=xarray.Variable(dims=('time','gridcell'),data=tide_elev[:,None],attr
 
 d=xarray.Dataset(data_vars={'tide_height':tide_height,'tide_salinity':tide_salinity},coords={'time':time,'gridcell':[0]})
 
-d.to_netcdf('./Annapolis_elev_sal_35yrs.nc')
+d.to_netcdf('./Annapolis_elev_sal_35yrs_NAVD.nc')

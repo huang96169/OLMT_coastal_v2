@@ -21,5 +21,5 @@ stress_decid 14 1
 ndays_off 0 15
 ndays_on 0 20
 sal_opt 14 0
-sal_tol 14 18.0
+sal_tol 14 20.0
 sal_threshold 14 10.0
