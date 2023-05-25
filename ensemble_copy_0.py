@@ -73,6 +73,8 @@ else:
          parm_values_str = s.split()
          for v in parm_values_str:
             parm_values.append(float(v))
+            #print('parm_values_str')
+            #print(float(v))
       linenum = linenum+1
    myinput.close()
 
@@ -255,7 +257,7 @@ for p in parm_names:
       #   param[parm_indices[pnum]]=1.0-parm_values[pnum]-parm_values[pnum-1]
       #   ierr = nffun.putvar(myfile, 'fr_fcel', param)
    pnum = pnum+1
-
+   #print(pnum)
 #ensure FATES seed allocation paramters sum to one
 #if (fates_seed_zeroed[0]):
 #  param = nffun.getvar(myfile,'fates_seed_alloc')

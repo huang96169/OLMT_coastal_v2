@@ -335,7 +335,64 @@ if (rank == 0):
           comm.send(-1, dest=process, tag=2)
 
 
-    #---------------------------NO post-processing---------------------------
+    #---------------------------Output post-processing---------------------------
+    if (do_postproc):
+        data_out = data.transpose()
+        parm_out = parms.transpose()
+        good=[]
+        for i in range(0,options.n):
+          #only save valid runs (no NaNs)
+          if not np.isnan(sum(data_out[i,:])):
+            good.append(i)
+        data_out = data_out[good,:]
+        parm_out = parm_out[good,:]
+        np.savetxt(options.casename+'_postprocessed.txt', data_out)
+        #UQ-ready outputs (80% of data for traning, 20% for validation)
+        UQ_output = 'UQ_output/'+options.casename
+        os.system('mkdir -p '+UQ_output+'/data')
+        np.savetxt(UQ_output+'/data/ytrain.dat', data_out[0:int(len(good)*0.8),:])
+        np.savetxt(UQ_output+'/data/yval.dat',   data_out[int(len(good)*0.8):,:])
+        np.savetxt(UQ_output+'/data/ptrain.dat', parm_out[0:int(len(good)*0.8),:])
+        np.savetxt(UQ_output+'/data/pval.dat', parm_out[int(len(good)*0.8):,:])
+        if (len(myobs) > 0):
+          obs_out=open(UQ_output+'/data/obs.dat','w')
+          for i in range(0,len(myobs)): 
+            obs_out.write(str(myobs[i])+' '+str(myobs_err[i])+'\n')
+          obs_out.close()       
+        myoutput = open(UQ_output+'/data/pnames.txt', 'w')
+        eden_header=''
+        for p in pnames:
+          myoutput.write(p+'\n')
+          eden_header=eden_header+p+','
+        myoutput.close()
+        myoutput = open(UQ_output+'/data/outnames.txt', 'w')
+        for v in myvars:
+          myoutput.write(v+'\n')
+          eden_header=eden_header+v+','
+        myoutput.close()
+        myoutput = open(UQ_output+'/data/param_range.txt', 'w')
+        for p in range(0,len(pmin)):
+          myoutput.write(pmin[p]+' '+pmax[p]+'\n')
+        myoutput.close()
+        print(np.hstack((parm_out,data_out)))
+        np.savetxt(UQ_output+'/data/foreden.csv', np.hstack((parm_out,data_out)), delimiter=',', header=eden_header[:-1])
+        if (options.run_uq):
+          #Run the sensitivity analysis using UQTk
+          #os.system('cp UQTk_scripts/*.x '+UQ_output+'/')
+          #os.chdir(UQ_output)
+          #os.system('./run_sensitivity.x')
+          #os.system('mkdir -p UQTk_output')
+          #os.system('mkdir -p UQTk_plots')
+          #os.system('mkdir -p UQTk_scripts')
+          #os.system('mv *.eps UQTk_plots')
+          #os.system('mv *.x UQTk_scripts')
+          #os.system('mv *.tar *.pk UQTk_output')
+          #os.chdir('../..')
+          #Create the surrogate model
+          os.system('python surrogate_NN.py --case '+options.casename)
+          if (max(myobs_err) > 0):
+            #Run the MCMC calibration on surrogate model if data provided
+            os.system('python MCMC.py --case '+options.casename+' --parm_list '+options.parm_list)
     MPI.Finalize()
 
 #--------------------- Slave process (individual ensemble members) --------------
@@ -372,8 +429,7 @@ else:
                   if os.path.isfile(exedir+'/acme.exe'):
                      os.system(exedir+'/acme.exe > acme_log.txt')
                   elif os.path.isfile(exedir+'/e3sm.exe'):
-                     print('myjob='+str(myjob))
-                     os.system(exedir+'/e3sm.exe')
+                     os.system(exedir+'/e3sm.exe > e3sm_log.txt')
                   elif os.path.isfile(exedir+'/cesm.exe'):
                      os.system(exedir+'/cesm.exe > cesm_log.txt')
                   if (options.spruce_treatments):
@@ -416,6 +472,15 @@ else:
                       os.system('mkdir '+rundir+'/'+treatments[t])
                       os.system(exedir+'/e3sm.exe > e3sm_log_'+treatments[t]+'.txt')
                       os.system('cp *.'+options.model_name+'.h?.20[1-2]*.nc '+treatments[t])
-            comm.send(rank,  dest=0, tag=3)
-            comm.send(myjob, dest=0, tag=4)
+            if (do_postproc):
+                ierr = postproc(myvars, myyear_start, myyear_end, myday_start, \
+                         myday_end, myavg_pd, myfactor, myoffset, mypft, mytreatment, myjob, \
+                         options.runroot, options.casename, pnames, ppfts, data_row, parm_row)
+                comm.send(rank, dest=0, tag=3)
+                comm.send(myjob, dest=0, tag=4)
+                comm.send(data_row, dest=0, tag=5)
+                comm.send(parm_row, dest=0, tag=6)
+            else:
+                comm.send(rank,  dest=0, tag=3)
+                comm.send(myjob, dest=0, tag=4)
   MPI.Finalize()

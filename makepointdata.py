@@ -211,6 +211,7 @@ elif (options.site != ''):
                 mylon=360.0+float(row[3])
             lon.append(mylon)
             lat.append(float(row[4]))
+            print('1st grid lat='+str(lat))
             if ('US-SPR' in options.site or 
                 (options.marsh or options.humhol)):
                 lon.append(mylon)
@@ -224,12 +225,13 @@ elif (options.site != ''):
                       mylon=float(row[3])
                       if (mylon < 0):
                           mylon=360.0+float(row[3])
+                      
                       lon.append(mylon)#append lat/lon for 2nd column from site3rd
                       lat.append(float(row[4]))
-                      print(mylon)
-                lon.append(mylon)#append twice so that lon ahd lat has 3 elements
-                lat.append(float(row[4]))
-                print(mylon)
+                      print('2nd grid lat='+str(lat))
+                      lon.append(mylon)#append twice so that lon ahd lat has 3 elements
+                      lat.append(float(row[4]))
+                print('3rd grid lat='+str(lat))
                 n_grids = 3
             startyear=int(row[6])
             endyear=int(row[7])
@@ -744,7 +746,7 @@ for n in range(0,n_grids):
             #if options.marsh and n==1: # Set tidal channel column in marsh mode to zero PFT area
             if options.marsh and n==1 and not (options.col3rd): # # [Wei Huang 2022-07-11] Set tidal channel column in marsh mode to zero PFT area
                 print('Setting PFT area in tidal column to zero')
-                mypft_frac = numpy.zeros([npft+npft_crop], numpy.float)
+                mypft_frac = numpy.zeros([npft+npft_crop], numpy.float64)
                 mypft_frac[0]=100.0
             # [Wei Huang 2022-07-11] adding option for 3rd column, tidal channel will be the 3rd column
             # [Wei Huang 2022-07-11] 1st and 2nd columns are same plants sharing same pfts

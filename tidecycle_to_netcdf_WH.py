@@ -49,12 +49,15 @@ import xarray
 
 # Write a one year file with PIE salinity data
 #sal_data = pandas.read_csv('/home/whf/E3SM/OLMT_coastal_v2/Annapolis_schism_salinity20172018plus2_MSL_WT6_1.csv')
-sal_data = pandas.read_csv('/home/whf/E3SM/OLMT_coastal_v2/Annapolis_schism_salinity20172018_CB3_3W_MSL.csv')
-sal_data = pandas.read_csv('/home/whf/E3SM/OLMT_coastal_v2/Annapolis_schism_salinity20172018_WT6_1_NAVD.csv')
+#sal_data = pandas.read_csv('/home/whf/E3SM/OLMT_coastal_v2/Annapolis_schism_salinity20172018_CB3_3W_MSL.csv')
+#sal_data = pandas.read_csv('/home/whf/E3SM/inputs/Annapolis_schismPlus2_Peter_salinity_WT6_1_39yrs_NAVD.csv')
+sal_data = pandas.read_csv('/home/whf/E3SM/inputs/Annapolis_monthlySalinity_39yrs_NAVD.csv')
+#sal_data = pandas.read_csv('/home/whf/E3SM/inputs/Annapolis_elev_0salinity_39yrs_NAVD.csv')
 sal_data['Tide_salinity']=sal_data['Tide_salinity'].fillna(25)
 salinity=sal_data['Tide_salinity'].to_numpy()
 time=sal_data['time_e'].to_numpy()
 print(len(time))
+#sal_data = pandas.read_csv('/home/whf/E3SM/inputs/Annapolis_elev_0salinity_35yrs_MSL.csv')
 tide_elev=sal_data['Tide_height'].to_numpy()
 #below two lines are using elev from different csv file
 #elev_data= pandas.read_csv('/home/whf/E3SM/OLMT_coastal_v2/Annapolis_sal_elev_detrend_datenum_MSL.csv')
@@ -74,4 +77,4 @@ tide_height=xarray.Variable(dims=('time','gridcell'),data=tide_elev[0:len(time),
 d=xarray.Dataset(data_vars={'tide_height':tide_height,'tide_salinity':tide_salinity},coords={'time':time,'gridcell':[0]})
 
 #d.to_netcdf('./Annapolis_WT6_1_schism_salinity20172018plus2_35yrs_MSL_tides.nc')
-d.to_netcdf('./Annapolis_WT6_1_schism_salinity20172018_35yrs_NAVD.nc')
+d.to_netcdf('/home/whf/E3SM/inputs/Annapolis_elev_monthlySalinity_39yrs_NAVD.nc')

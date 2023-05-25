@@ -1,11 +1,11 @@
 % This script is used for reading and processing variables from ELM outputs
 % Reading output variables
 OUTDIR='/home/whf/scratch/';
-RUNcase='B01';
+RUNcase='NMTB39b';
 year=2018;
-column_n=1
+column_n=3
 CaseName = strcat(RUNcase,'_US-GC4_ICB20TRCNPRDCTCBC');
-f2=fopen(strcat('./H2OSFC_newNPP_',num2str(year),'_',RUNcase,'_vars_c',num2str(column_n),'.txt'),'wt');
+f2=fopen(strcat('../runcase/results/H2OSFC_newNPP_',num2str(year),'_',RUNcase,'_vars_c',num2str(column_n),'.txt'),'wt');
 %f2=fopen(strcat(RUNcase,'NPP_annual_35yr_',num2str(column_n),'.txt'),'wt')
 ny=year-1987+1;
 interval=3600;

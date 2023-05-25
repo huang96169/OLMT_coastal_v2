@@ -882,7 +882,7 @@ else:
             #editted by Wei Huang for the 1 line below to correct the tidal period
             os.system(myncap+' -O -s "tide_coeff_period_%d = humhol_ht*0+%1.4e" '%(comp+1,3600/tidecomps['Speed'].iloc[comp])+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
             os.system(myncap+' -O -s "tide_coeff_phase_%d = humhol_ht*0+%1.4e" '%(comp+1,tidecomps['Phase'].iloc[comp]*math.pi/180)+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
-        os.system(myncap+' -O -s "tide_baseline = humhol_ht*0+0.0" '+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
+        os.system(myncap+' -O -s "tide_baseline = humhol_ht*0+300.0" '+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
     elif (options.marsh or options.col3rd) and options.tide_forcing_file == '':
         print('Tidal cycle coefficients not specified. Model will use GCREW defaults. Can also edit in parm file.')
     os.system(myncap+' -O -s "crit_gdd1 = flnr" '+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
@@ -1892,7 +1892,7 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
             print('Error:  ensemble file does not exist')
             sys.exit(1)
 
-        samples=numpy.zeros((n_parameters,100000), dtype=numpy.float) 
+        samples=numpy.zeros((n_parameters,100000), dtype=numpy.float64) 
         #get parameter samples and information
         myinput=open(options.ensemble_file)
         nsamples = 0
@@ -1903,7 +1903,7 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
         myinput.close()
     elif (int(options.mc_ensemble) > 0):
         nsamples = int(options.mc_ensemble)
-        samples=numpy.zeros((n_parameters,nsamples), dtype=numpy.float)
+        samples=numpy.zeros((n_parameters,nsamples), dtype=numpy.float64)
         for i in range(0,nsamples):
             for j in range(0,n_parameters):
                 samples[j][i] = param_min[j]+(param_max[j]-param_min[j])*numpy.random.rand(1)
