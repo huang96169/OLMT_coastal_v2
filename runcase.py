@@ -882,7 +882,7 @@ else:
             #editted by Wei Huang for the 1 line below to correct the tidal period
             os.system(myncap+' -O -s "tide_coeff_period_%d = humhol_ht*0+%1.4e" '%(comp+1,3600/tidecomps['Speed'].iloc[comp])+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
             os.system(myncap+' -O -s "tide_coeff_phase_%d = humhol_ht*0+%1.4e" '%(comp+1,tidecomps['Phase'].iloc[comp]*math.pi/180)+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
-        os.system(myncap+' -O -s "tide_baseline = humhol_ht*0+300.0" '+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
+        os.system(myncap+' -O -s "tide_baseline = humhol_ht*0+0.0" '+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
     elif (options.marsh or options.col3rd) and options.tide_forcing_file == '':
         print('Tidal cycle coefficients not specified. Model will use GCREW defaults. Can also edit in parm file.')
     os.system(myncap+' -O -s "crit_gdd1 = flnr" '+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
@@ -2015,7 +2015,9 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
         if ('oic' in options.machine or 'cades' in options.machine or 'ubuntu' in options.machine):
             mpicmd = 'mpirun'
             if ('cades' in options.machine):
-                mpicmd = '/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/bin/mpirun'
+                #mpicmd = '/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/bin/mpirun'
+                output_run.write('conda activate phpenv\n') #[Wei Huang: use mpi under conda environment installed by user, 06-27-2023]
+                mpicmd = 'mpirun' #[Wei Huang: use mpi under conda environment installed by user, 06-27-2023]
             cmd = mpicmd+' -np '+str(np_total)+' python manage_ensemble.py ' \
                +'--case '+casename+' --runroot '+runroot+' --n_ensemble '+str(nsamples)+' --ens_file '+ \
                options.ensemble_file+' --exeroot '+exeroot+' --parm_list '+options.parm_list+' --cnp '+cnp + \

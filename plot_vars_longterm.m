@@ -1,15 +1,15 @@
 % This script is used for reading and processing variables from ELM outputs
 % Reading output variables
 OUTDIR='/home/whf/scratch/';
-RUNcase='NMTB44d';
+RUNcase='OM06';
 year=1984;
-column_n=2
-CaseName = strcat(RUNcase,'_US-GC4_ICB20TRCNPRDCTCBC');
+column_n=1
+CaseName = strcat(RUNcase,'_US-GLU_ICB20TRCNPRDCTCBC');
 %f2=fopen(strcat('./H2OSFC_NPP_',num2str(year),'_',RUNcase,'_vars_c',num2str(column_n),'.txt'),'wt');
 f2=fopen(strcat('../runcase/results/',RUNcase,'NPP_annual_35yr_',num2str(column_n),'.txt'),'wt')
 ny=year-1987+1;
 interval=86400/24;
-for i=year:year+34
+for i=year:year+37
 %for i=32:32
    FileName = strcat(OUTDIR,CaseName,'/run/',CaseName,'.elm.h0.',num2str(i),'-01-01-00000.nc')
 

@@ -3,7 +3,7 @@
 OUTDIR='/home/whf/scratch/';
 RUNcase='NMTB39b';
 year=2018;
-column_n=3
+column_n=1
 CaseName = strcat(RUNcase,'_US-GC4_ICB20TRCNPRDCTCBC');
 f2=fopen(strcat('../runcase/results/H2OSFC_newNPP_',num2str(year),'_',RUNcase,'_vars_c',num2str(column_n),'.txt'),'wt');
 %f2=fopen(strcat(RUNcase,'NPP_annual_35yr_',num2str(column_n),'.txt'),'wt')
@@ -42,6 +42,8 @@ for i=year:year
    end
 end
 fclose(f2)
+figure
+plot(AGNPP)
 %AGNPP_annual=mean(AGNPP_annual)
 %BGNPP_annual=mean(BGNPP_annual)
 %NPP_annual=mean(NPP_annual)
